@@ -12,24 +12,47 @@ public class CalculatorFunction {
 
     public int add(String numbers) {
         String delimiter = getDelimiter(numbers);
+        if(!delimiter.equals("")) numbers = numbers.substring(3);
         String[] splitNumbers = splitString(numbers, delimiter);
         List<Integer> integerArray = convertStringArrayToIntegerArray(splitNumbers);
         return sum(integerArray);
     }
 
     private String getDelimiter(String numbers) {
-        return null;
+        if(numbers.contains("//")) {
+            try {
+                return Character.toString(numbers.charAt(2));
+            } catch (IndexOutOfBoundsException exception) {
+                LOGGER.error("There is no delimiter: ", exception.getMessage());
+                return "";
+            }
+        } else {
+            return "";
+        }
     }
 
     private String[] splitString(String numbers, String delimiter) {
-        return null;
+        String regex = "[" + delimiter + ",\n]";
+        return numbers.split(regex);
     }
 
     private List<Integer> convertStringArrayToIntegerArray(String[] numbers) {
-        return null;
+        List<Integer> numberArray = new ArrayList<>();
+        for (String number : numbers) {
+            try {
+                numberArray.add(Integer.parseInt(number));
+            } catch (Exception exception) {
+                LOGGER.error("Couldn't parse {} into integer: {}", number, exception.getMessage());
+            }
+        }
+        return numberArray;
     }
 
     private int sum(List<Integer> numbers) {
-        return 0;
+        Integer sum = 0;
+        for (Integer number : numbers) {
+            sum += number;
+        }
+        return sum.intValue();
     }
 }
